@@ -1,22 +1,17 @@
-# import pygame  # this says unused because it is imported in display_info.py
 import sys
-# import random
+import copy
+import tkinter
+import logging
 from tetris_info import *
 from display_info import *
 from presets import *
 from settings import *
 from pygame.locals import *
-import copy
-from tk import *
-import tkinter
-import logging
-# import pygame_widgets
-# from pygame_widgets.button import Button
 
 
 logging.basicConfig(filename='error.log', level=logging.INFO)
 pygame.init()
-# clock = pygame.time.Clock()
+
 if tekoFontVisible:
     fonts = [pygame.font.SysFont("default", 25), pygame.font.SysFont("teko", 20), pygame.font.SysFont("teko", 25),
              pygame.font.SysFont("teko", 35)]
