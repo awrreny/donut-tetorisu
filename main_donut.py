@@ -461,7 +461,7 @@ def draw_ui_text(init=False, draw_hold_queue=False, draw_next_queue=False, print
                              (boardLeftXValue, boardTopYValue + pixelsPerTile * 3 + j * pixelsPerTile),
                              (boardLeftXValue + boardWidth, boardTopYValue + pixelsPerTile * 3 + j * pixelsPerTile))
         show_text_25("controls in console/terminal", color_black, 560, 600)
-        # show_text_25("made by warren", color_black, 335, 665)
+        # show_text_25("made", color_black, 335, 665)
         # next queue
         # next_queue_topleft_x = boardLeftXValue + boardWidth + 1
         # next_queue_topleft_y = boardTopYValue + pixelsPerTile*3
