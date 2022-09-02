@@ -19,13 +19,9 @@ key_changeCustomBag = K_n  # to input your own queue
 key_changePreset = K_m  # to input a board based on presets.py
 key_resetboard = K_F4  # window loses focus when you do this (but only once?)
 key_retryqueue = K_4  # does the same as resetboard but with the same queue (useful for retrying pc solutions)
-# here comes the donut things
-key_shiftleft = K_u  # shifts the entire board left with looping
-key_shiftright = K_o
-key_shiftup = K_i  # shifts the entire board up with looping (where the top is based on stack height)
-key_shiftdown = K_k
-key_shiftleftbound = K_j  # shifts the board left, looping based on the bounding box of every placed piece
-key_shiftrightbound = K_l
+
+# donut controls changed in donut_transformations.py
+
 
 setFPS = 60
 
