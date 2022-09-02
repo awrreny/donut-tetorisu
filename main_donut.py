@@ -2,6 +2,7 @@ import sys
 import copy
 import tkinter
 import logging
+import donut_transformations
 from tetris_info import *
 from display_info import *
 from presets import *
@@ -185,7 +186,7 @@ class GameState:
                     line_clear_effect("check the console!!!!", 80, 300)
                     pygame.display.update()
                     print(f"current custom bag: {customBag}")
-                    customBag = list(input("Please enter new custom bag: (e.g iosz) "))
+                    customBag = list(input("Please enter new custom bag: (e.g iosz) ").lower())
                     print(f"New custom bag is now {customBag}")
                     print("Reset board to see custom bag (default: F4)")
                     line_clear_effect("", 80, 300, width=160)
@@ -204,18 +205,20 @@ class GameState:
                         else:
                             print("invalid preset D:<")
                     line_clear_effect("", 80, 300, width=160)
-                elif event.key == key_shiftleft:
-                    board = shift_board(board, "left")
-                elif event.key == key_shiftright:
-                    board = shift_board(board, "right")
-                elif event.key == key_shiftup:
-                    board = shift_board(board, "up")
-                elif event.key == key_shiftdown:
-                    board = shift_board(board, "down")
-                elif event.key == key_shiftleftbound:
-                    board = shift_board(board, "leftbound")
-                elif event.key == key_shiftrightbound:
-                    board = shift_board(board, "rightbound")
+                # elif event.key == key_shiftleft:
+                #     board = shift_board(board, "left")
+                # elif event.key == key_shiftright:
+                #     board = shift_board(board, "right")
+                # elif event.key == key_shiftup:
+                #     board = shift_board(board, "up")
+                # elif event.key == key_shiftdown:
+                #     board = shift_board(board, "down")
+                # elif event.key == key_shiftleftbound:
+                #     board = shift_board(board, "leftbound")
+                # elif event.key == key_shiftrightbound:
+                #     board = shift_board(board, "rightbound")
+                else:
+                    board = donut_transformations.shift_board(board, event.key, board_columns)
                 place_tetromino(tetrominoState)
                 render_ghost_piece()
                 draw_board()
@@ -346,52 +349,52 @@ def format_time(time, show_milliseconds=False):
     return formatted_time
 
 
-def shift_board(board_, direction):
-    global board_columns
-    stack_height = 0
-    leftmost_tile_index = board_columns - 1
-    rightmost_tile_index = 0
-    temp_board = copy.deepcopy(board_)
-    for row in enumerate(temp_board):  # find height of bounding box
-        if row[1].count("0") != board_columns:
-            stack_height = 23 - row[0]
-            break
-    for row in temp_board:  # find leftmost tile for bounding box
-        for tile in enumerate(row):
-            if tile[1] != "0":
-                if tile[0] < leftmost_tile_index:
-                    leftmost_tile_index = tile[0]
-                break
-    for row in temp_board:  # find rightmost tile for bounding box
-        for tile in enumerate(reversed(row)):
-            if tile[1] != "0":
-                if (board_columns - 1) - tile[0] > rightmost_tile_index:
-                    rightmost_tile_index = (board_columns - 1) - tile[0]
-                break
-    print(rightmost_tile_index)
-    if direction == "left":
-        for row in temp_board:
-            row.append(row[0])
-            row.pop(0)
-    elif direction == "right":
-        for row in temp_board:
-            row.insert(0, row[-1])
-            row.pop(-1)
-    elif direction == "up":
-        temp_board.append(temp_board[0 - stack_height])
-        temp_board.pop(-1 - stack_height)
-    elif direction == "down":
-        temp_board.insert(0 - stack_height, temp_board[-1])
-        temp_board.pop()
-    elif direction == "rightbound":
-        for row in temp_board:
-            row.insert(leftmost_tile_index, row[rightmost_tile_index])
-            row.pop(rightmost_tile_index+1)
-    elif direction == "leftbound":
-        for row in temp_board:
-            row.insert(rightmost_tile_index+1, row[leftmost_tile_index])
-            row.pop(leftmost_tile_index)
-    return temp_board
+# def shift_board(board_, direction):
+#     global board_columns
+#     stack_height = 0
+#     leftmost_tile_index = board_columns - 1
+#     rightmost_tile_index = 0
+#     temp_board = copy.deepcopy(board_)
+#     for row in enumerate(temp_board):  # find height of bounding box
+#         if row[1].count("0") != board_columns:
+#             stack_height = 23 - row[0]
+#             break
+#     for row in temp_board:  # find leftmost tile for bounding box
+#         for tile in enumerate(row):
+#             if tile[1] != "0":
+#                 if tile[0] < leftmost_tile_index:
+#                     leftmost_tile_index = tile[0]
+#                 break
+#     for row in temp_board:  # find rightmost tile for bounding box
+#         for tile in enumerate(reversed(row)):
+#             if tile[1] != "0":
+#                 if (board_columns - 1) - tile[0] > rightmost_tile_index:
+#                     rightmost_tile_index = (board_columns - 1) - tile[0]
+#                 break
+#     print(rightmost_tile_index)
+#     if direction == "left":
+#         for row in temp_board:
+#             row.append(row[0])
+#             row.pop(0)
+#     elif direction == "right":
+#         for row in temp_board:
+#             row.insert(0, row[-1])
+#             row.pop(-1)
+#     elif direction == "up":
+#         temp_board.append(temp_board[0 - stack_height])
+#         temp_board.pop(-1 - stack_height)
+#     elif direction == "down":
+#         temp_board.insert(0 - stack_height, temp_board[-1])
+#         temp_board.pop()
+#     elif direction == "rightbound":
+#         for row in temp_board:
+#             row.insert(leftmost_tile_index, row[rightmost_tile_index])
+#             row.pop(rightmost_tile_index+1)
+#     elif direction == "leftbound":
+#         for row in temp_board:
+#             row.insert(rightmost_tile_index+1, row[leftmost_tile_index])
+#             row.pop(leftmost_tile_index)
+#     return temp_board
 
 
 def show_text_25(text, color, x, y):
@@ -461,7 +464,7 @@ def draw_ui_text(init=False, draw_hold_queue=False, draw_next_queue=False, print
                              (boardLeftXValue, boardTopYValue + pixelsPerTile * 3 + j * pixelsPerTile),
                              (boardLeftXValue + boardWidth, boardTopYValue + pixelsPerTile * 3 + j * pixelsPerTile))
         show_text_25("controls in console/terminal", color_black, 560, 600)
-        # show_text_25("made", color_black, 335, 665)
+        # show_text_25("made by ", color_black, 335, 665)
         # next queue
         # next_queue_topleft_x = boardLeftXValue + boardWidth + 1
         # next_queue_topleft_y = boardTopYValue + pixelsPerTile*3
@@ -692,13 +695,13 @@ def line_clear_effect(text, x, y, width=130):
         show_text_25(text, main_text_color, x, y)
 
 
-def rotate_piece(piece_state, rotation):  
-    place_tetromino(tetrominoState, True) 
+def rotate_piece(piece_state, rotation):
+    place_tetromino(tetrominoState, True)
     if piece_state[2] == "i":
         kick_table = kick_table_I
     else:
         kick_table = kick_table_normal
-    kick_attempt_num = 0  # different kicks are listed 
+    kick_attempt_num = 0  # different kicks are listed
     rotated_piece_state = change_piece_state(piece_state, orientation_change=rotation)
     successful_placement = False
     while not successful_placement:
