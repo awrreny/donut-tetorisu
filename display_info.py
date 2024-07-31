@@ -1,9 +1,9 @@
-import pygame
+import pygame as pg
 # this file contains info for the display e.g colours and dictionaries for colours
 
 
 def greyscale(brightness):
-    return pygame.Color(brightness, brightness, brightness)
+    return pg.Color(brightness, brightness, brightness)
 
 
 color_black = greyscale(0)
@@ -13,27 +13,27 @@ color_darkishish_grey = greyscale(96)
 color_grey = greyscale(128)
 color_lightish_grey = greyscale(160)
 color_light_grey = greyscale(192)
-color_cyan = pygame.Color(0, 255, 255)
-color_yellow = pygame.Color(255, 255, 0)
-color_purple = pygame.Color(128, 0, 128)
-color_green = pygame.Color(0, 255, 0)
-color_red = pygame.Color(255, 0, 0)
-color_blue = pygame.Color(0, 0, 255)
-color_orange = pygame.Color(255, 127, 0)
-color_dark_cyan = pygame.Color(0, 127, 127)
-color_dark_yellow = pygame.Color(127, 127, 0)
-color_dark_purple = pygame.Color(64, 0, 64)
-color_dark_green = pygame.Color(0, 127, 0)
-color_dark_red = pygame.Color(127, 0, 0)
-color_dark_blue = pygame.Color(0, 0, 127)
-color_dark_orange = pygame.Color(127, 64, 0)
-color_light_cyan = pygame.Color(128, 255, 255)
-color_light_yellow = pygame.Color(255, 255, 128)
-color_light_purple = pygame.Color(192, 0, 192)
-color_light_green = pygame.Color(128, 255, 128)
-color_light_red = pygame.Color(255, 128, 128)
-color_light_blue = pygame.Color(0, 64, 255)
-color_light_orange = pygame.Color(255, 192, 128)
+color_cyan = pg.Color(0, 255, 255)
+color_yellow = pg.Color(255, 255, 0)
+color_purple = pg.Color(128, 0, 128)
+color_green = pg.Color(0, 255, 0)
+color_red = pg.Color(255, 0, 0)
+color_blue = pg.Color(0, 0, 255)
+color_orange = pg.Color(255, 127, 0)
+color_dark_cyan = pg.Color(0, 127, 127)
+color_dark_yellow = pg.Color(127, 127, 0)
+color_dark_purple = pg.Color(64, 0, 64)
+color_dark_green = pg.Color(0, 127, 0)
+color_dark_red = pg.Color(127, 0, 0)
+color_dark_blue = pg.Color(0, 0, 127)
+color_dark_orange = pg.Color(127, 64, 0)
+color_light_cyan = pg.Color(128, 255, 255)
+color_light_yellow = pg.Color(255, 255, 128)
+color_light_purple = pg.Color(192, 0, 192)
+color_light_green = pg.Color(128, 255, 128)
+color_light_red = pg.Color(255, 128, 128)
+color_light_blue = pg.Color(0, 64, 255)
+color_light_orange = pg.Color(255, 192, 128)
 
 # colou?rs
 

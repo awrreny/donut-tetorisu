@@ -1,4 +1,4 @@
-from pygame.locals import *
+import pygame.locals as pgl
 import copy
 #  this file stores the donut transformations, and you can also create your own
 #  the board is stored as a 2d list - a list of rows, for example
@@ -37,12 +37,12 @@ def shift_board(board, transformation_key, board_columns=10):
                     rightmost_tile_index = (board_columns - 1) - tile[0]
                 break
     key_to_transformation_dict = {
-        K_u: "left",
-        K_o: "right",
-        K_k: "down",
-        K_i: "up",  # transform_up(board, stack_height),
-        K_j: "leftbound",
-        K_l: "rightbound",
+        pgl.K_u: "left",
+        pgl.K_o: "right",
+        pgl.K_k: "down",
+        pgl.K_i: "up",  # transform_up(board, stack_height),
+        pgl.K_j: "leftbound",
+        pgl.K_l: "rightbound",
     }
     transformation = key_to_transformation_dict.get(transformation_key)
     if transformation == "left":

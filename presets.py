@@ -149,6 +149,7 @@ presets = {
     ],
 }
 
+# TODO
 # i will (try to) add a way to input fumens
 
 
