@@ -7,7 +7,8 @@ from tetris_info import *
 from display_info import *
 from presets import *
 from settings import *
-from pygame.locals import *
+import pygame.locals as pgl
+import pygame as pg
 
 
 logging.basicConfig(filename='error.log', level=logging.INFO)
@@ -61,7 +62,7 @@ class GameState:
     @staticmethod
     def intro():
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == pgl.QUIT:
                 pygame.quit()
                 sys.exit()
 
@@ -70,18 +71,18 @@ class GameState:
         global current_time_ms, boardLeftXValue, boardRect
         current_time_ms = pygame.time.get_ticks()
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == pgl.QUIT:
                 pygame.quit()
                 sys.exit()
         pygame.draw.rect(screen, background_color,
-                         Rect(0, 0, windowWidth, (current_time_ms - gameOverTime)*7/30))
+                            pygame.Rect(0, 0, windowWidth, (current_time_ms - gameOverTime)*7/30))
         if current_time_ms - gameOverTime < 3000:
             boardLeftXValue = int(260 - scaled_sigmoid(current_time_ms - gameOverTime))
             game_over_text.texts[1][0] = f"You cleared {lines_cleared} lines in {format_time(gameOverTime)}"
         else:
             game_over_text.render_info_texts()
         pygame.draw.rect(screen, background_color,
-                         Rect(boardLeftXValue + boardWidth, boardTopYValue, 10, boardHeight + 1))
+                         pg.Rect(boardLeftXValue + boardWidth, boardTopYValue, 10, boardHeight + 1))
         draw_board()
         # draw lines between squares
         for j in range(board_columns + 1):  # draw vertical lines
@@ -139,15 +140,15 @@ class GameState:
         if not tuple(keys_pressed)[79]:
             DASRightDelayTime = current_time_ms
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == pgl.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == MOUSEBUTTONDOWN:
+            if event.type == pgl.MOUSEBUTTONDOWN:
                 if settingsButton.rect.collidepoint(pygame.mouse.get_pos()):
                     # settingsButton.state = "open"
                     self.state = "settings"
-            if event.type == KEYDOWN:
-                if event.key == K_h:
+            if event.type == pgl.KEYDOWN:
+                if event.key == pgl.K_h:  # what is this? TODO
                     place_tetromino(create_ghost_piece(tetrominoState), vfx=True)
                 if event.key != key_hard_drop:
                     place_tetromino(tetrominoState, True)  # destroy o.g. piece b4 placing unless hard drop
@@ -248,10 +249,10 @@ class GameState:
         #     self.state = "main_game"
         #     settingsButton.rect.topleft = (20, windowHeight - (20 + settingsButtonSize))
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == pgl.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == MOUSEBUTTONDOWN:
+            if event.type == pgl.MOUSEBUTTONDOWN:
                 if settingsButton.rect.collidepoint(pygame.mouse.get_pos()):
                     initiate_board_graphics()
                     self.state = "main_game"
@@ -295,7 +296,7 @@ class UIText:
         self.coords = coords
         self.xy_gaps = xy_gaps  # pixels between each text as a tuple (x, y)
         self.texts = args
-        self.rect = Rect(self.coords, (250, 60))
+        self.rect = pg.Rect(self.coords, (250, 60))
 
     def render_info_texts(self):  # for texts beside the board e.g time, gravity, lines cleared, piece speed
         coords = self.coords
@@ -412,33 +413,33 @@ def draw_board():
                 if row[0] <= 2:  # above board
                     if tile[1] != "0":
                         pygame.draw.rect(screen, char_to_light_color[tile[1]],
-                                         Rect((boardLeftXValue + 1 + tile[0] * pixelsPerTile,
+                                         pg.Rect((boardLeftXValue + 1 + tile[0] * pixelsPerTile,
                                                boardTopYValue + 1 + row[0] * pixelsPerTile),
                                               (pixelsPerTile - 1, pixelsPerTile - 1)))
                         pygame.draw.rect(screen, char_to_dark_color[tile[1]],
-                                         Rect((boardLeftXValue + 2 + tile[0] * pixelsPerTile,
+                                         pg.Rect((boardLeftXValue + 2 + tile[0] * pixelsPerTile,
                                                boardTopYValue + 2 + row[0] * pixelsPerTile),
                                               (pixelsPerTile - 2, pixelsPerTile - 2)))
                         pygame.draw.rect(screen, char_to_color[tile[1]],
-                                         Rect((boardLeftXValue + 2 + tile[0] * pixelsPerTile,
+                                         pg.Rect((boardLeftXValue + 2 + tile[0] * pixelsPerTile,
                                                boardTopYValue + 2 + row[0] * pixelsPerTile),
                                               (pixelsPerTile - 3, pixelsPerTile - 3)))
                     else:
                         pygame.draw.rect(screen, background_color,
-                                         Rect((boardLeftXValue + 1 + tile[0] * pixelsPerTile,
+                                         pg.Rect((boardLeftXValue + 1 + tile[0] * pixelsPerTile,
                                                boardTopYValue + 1 + row[0] * pixelsPerTile),
                                               (pixelsPerTile - 1, pixelsPerTile - 1)))
                 else:  # in board
                     pygame.draw.rect(screen, char_to_light_color[tile[1]],
-                                     Rect((boardLeftXValue + 1 + tile[0] * pixelsPerTile,
+                                     pg.Rect((boardLeftXValue + 1 + tile[0] * pixelsPerTile,
                                            boardTopYValue + 1 + row[0] * pixelsPerTile),
                                           (pixelsPerTile - 1, pixelsPerTile - 1)))
                     pygame.draw.rect(screen, char_to_dark_color[tile[1]],
-                                     Rect((boardLeftXValue + 2 + tile[0] * pixelsPerTile,
+                                     pg.Rect((boardLeftXValue + 2 + tile[0] * pixelsPerTile,
                                            boardTopYValue + 2 + row[0] * pixelsPerTile),
                                           (pixelsPerTile - 2, pixelsPerTile - 2)))
                     pygame.draw.rect(screen, char_to_color[tile[1]],
-                                     Rect((boardLeftXValue + 2 + tile[0] * pixelsPerTile,
+                                     pg.Rect((boardLeftXValue + 2 + tile[0] * pixelsPerTile,
                                            boardTopYValue + 2 + row[0] * pixelsPerTile),
                                           (pixelsPerTile - 3, pixelsPerTile - 3)))
     for row in enumerate(vfx_board):
@@ -446,7 +447,7 @@ def draw_board():
             if tile[1] == "g" and board[row[0]][tile[0]] == "0":  # ghost block -
                 # 2nd condition is so it doesn't overwrite physical blocks
                 pygame.draw.rect(screen, ghost_block_color,
-                                 Rect((boardLeftXValue + 3 + tile[0] * pixelsPerTile,
+                                 pg.Rect((boardLeftXValue + 3 + tile[0] * pixelsPerTile,
                                        boardTopYValue + 3 + row[0] * pixelsPerTile),
                                       (pixelsPerTile - 5, pixelsPerTile - 5)), 1)
 
@@ -484,12 +485,12 @@ def draw_ui_text(init=False, draw_hold_queue=False, draw_next_queue=False, print
                             ("held piece", (144, 87), (137, 92)))
 
     if draw_hold_queue:
-        pygame.draw.rect(screen, background_color, Rect(boardLeftXValue - 152,
+        pygame.draw.rect(screen, background_color, pg.Rect(boardLeftXValue - 152,
                                                         boardTopYValue + pixelsPerTile * 3 + 27, 150, 105))
         if held_piece != "":
             draw_tetromino(held_piece, 134, 190, 25)
     if draw_next_queue:
-        pygame.draw.rect(screen, background_color, Rect(boardLeftXValue + boardWidth + 2,
+        pygame.draw.rect(screen, background_color, pg.Rect(boardLeftXValue + boardWidth + 2,
                                                         boardTopYValue + pixelsPerTile*3 + 27, 150, 305))
         for j in enumerate(piece_queue[1:6]):
             draw_tetromino(j[1], 567, 170 + 60*j[0], 25)
@@ -527,9 +528,9 @@ def draw_tetromino(piece_type, x, y, piece_size):
 
 def draw_tile(piece_type, x, y, piece_size):  # for outside board e.g next and hold pieces
     global screen
-    pygame.draw.rect(screen, char_to_light_color[piece_type], Rect(x, y, piece_size, piece_size))
-    pygame.draw.rect(screen, char_to_dark_color[piece_type], Rect(x+1, y+1, piece_size-1, piece_size-1))
-    pygame.draw.rect(screen, char_to_color[piece_type], Rect(x+1, y+1, piece_size-2, piece_size-2))
+    pygame.draw.rect(screen, char_to_light_color[piece_type], pg.Rect(x, y, piece_size, piece_size))
+    pygame.draw.rect(screen, char_to_dark_color[piece_type], pg.Rect(x+1, y+1, piece_size-1, piece_size-1))
+    pygame.draw.rect(screen, char_to_color[piece_type], pg.Rect(x+1, y+1, piece_size-2, piece_size-2))
 
 
 def place_tile(x, y, piece_type):  # function that places block on board by changing a value of the 2d list
@@ -690,7 +691,7 @@ def new_tetromino():
 
 
 def line_clear_effect(text, x, y, width=130):
-    pygame.draw.rect(screen, background_color, Rect(x, y, width, 100))
+    pygame.draw.rect(screen, background_color, pg.Rect(x, y, width, 100))
     if text != "empty":
         show_text_25(text, main_text_color, x, y)
 
@@ -762,11 +763,11 @@ def draw_box_with_title(coords, colors, text):
     # coords is (leftx, topy, width, height, headerheight)
     # colors are (bgcolor, bordercolor, header_color)
     # text coords are (text (x, y with teko), (x, y without))
-    pygame.draw.rect(screen, colors[0], Rect(coords[0] + 1, coords[1] + 1, coords[2], coords[3]))
-    pygame.draw.rect(screen, colors[1], Rect(coords[0], coords[1], coords[2]+1, coords[3]+1), 1)
+    pygame.draw.rect(screen, colors[0], pg.Rect(coords[0] + 1, coords[1] + 1, coords[2], coords[3]))
+    pygame.draw.rect(screen, colors[1], pg.Rect(coords[0], coords[1], coords[2]+1, coords[3]+1), 1)
     pygame.draw.line(screen, colors[1], (coords[0], coords[1] + coords[4]+1),
                      (coords[0] + coords[2], coords[1] + coords[4]+1), 1)
-    pygame.draw.rect(screen, colors[2], Rect(coords[0] + 1, coords[1] + 1, coords[2]-1, coords[4]))
+    pygame.draw.rect(screen, colors[2], pg.Rect(coords[0] + 1, coords[1] + 1, coords[2]-1, coords[4]))
     if tekoFontVisible:
         show_text_25(text[0], main_text_color, text[1][0], text[1][1])
     else:
@@ -871,7 +872,7 @@ boardLeftXValue = 260
 boardTopYValue = 5
 boardWidth = 280
 boardHeight = 644
-boardRect = Rect(boardLeftXValue, boardTopYValue, boardWidth, boardHeight)
+boardRect = pg.Rect(boardLeftXValue, boardTopYValue, boardWidth, boardHeight)
 pixelsPerTile = boardWidth/board_columns
 
 # draw board squares
