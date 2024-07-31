@@ -15,28 +15,7 @@ import copy
 # in this format, the 2d list looks like the tetris board (this is grace system)
 # add a transformation by adding it to the function below (i will edit later with explanation)
 
-
-def shift_board(board, transformation_key, board_columns=10):
-    stack_height = 0
-    leftmost_tile_index = board_columns - 1
-    rightmost_tile_index = 0
-    for row in enumerate(board):  # find height of bounding box
-        if row[1].count("0") != board_columns:
-            stack_height = 23 - row[0]
-            break
-    for row in board:  # find leftmost tile for bounding box
-        for tile in enumerate(row):
-            if tile[1] != "0":
-                if tile[0] < leftmost_tile_index:
-                    leftmost_tile_index = tile[0]
-                break
-    for row in board:  # find rightmost tile for bounding box
-        for tile in enumerate(reversed(row)):
-            if tile[1] != "0":
-                if (board_columns - 1) - tile[0] > rightmost_tile_index:
-                    rightmost_tile_index = (board_columns - 1) - tile[0]
-                break
-    key_to_transformation_dict = {
+key_to_transformation_dict = {
         pgl.K_u: "left",
         pgl.K_o: "right",
         pgl.K_k: "down",
@@ -44,6 +23,39 @@ def shift_board(board, transformation_key, board_columns=10):
         pgl.K_j: "leftbound",
         pgl.K_l: "rightbound",
     }
+
+
+
+def shift_board(board, transformation_key, board_columns=10):
+    stack_height = 0
+    leftmost_tile_index = board_columns - 1
+    rightmost_tile_index = 0
+
+    # currently calculates bounding box every transformation. Maybe would be better to store it and update when it changes?
+    # bounding box usually does change every transformation so this seems fine
+
+    # find height of bounding box
+    for rowNum, row in enumerate(board):  
+        if row.count("0") != board_columns:
+            stack_height = 23 - rowNum
+            break
+
+    # find leftmost tile for bounding box
+    for row in board:  
+        for colNum, tile in enumerate(row):
+            if tile != "0":
+                if colNum < leftmost_tile_index:
+                    leftmost_tile_index = colNum
+                break
+
+    # find rightmost tile for bounding box
+    for row in board:  
+        for colNum, tile in reversed(list(enumerate(row))):
+            if tile != "0":
+                if colNum > rightmost_tile_index:
+                    rightmost_tile_index = colNum
+                break
+    
     transformation = key_to_transformation_dict.get(transformation_key)
     if transformation == "left":
         for row in board:
