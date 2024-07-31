@@ -26,59 +26,68 @@ key_to_transformation_dict = {
 
 
 
-def shift_board(board, transformation_key, board_columns=10):
-    stack_height = 0
-    leftmost_tile_index = board_columns - 1
+def shift_board(board, transformation_key):
+    leftmost_tile_index = len(board[0]) - 1
     rightmost_tile_index = 0
 
     # currently calculates bounding box every transformation. Maybe would be better to store it and update when it changes?
     # bounding box usually does change every transformation so this seems fine
 
     # find height of bounding box
-    for rowNum, row in enumerate(board):  
-        if row.count("0") != board_columns:
-            stack_height = 23 - rowNum
-            break
+    # assumes there are no empty rows with non-empty rows above it, which is true in standard gameplay and with these 6 transformations
+    # if performance for larger boards becomes an issue then binary search can be implemented
+    stack_height = 0
+    for row in reversed(board):
+        if all([tile == '0' for tile in row]): break
+        stack_height += 1
 
     # find leftmost tile for bounding box
     for row in board:  
         for colNum, tile in enumerate(row):
             if tile != "0":
-                if colNum < leftmost_tile_index:
-                    leftmost_tile_index = colNum
+                leftmost_tile_index = min(leftmost_tile_index, colNum)
                 break
 
     # find rightmost tile for bounding box
     for row in board:  
         for colNum, tile in reversed(list(enumerate(row))):
             if tile != "0":
-                if colNum > rightmost_tile_index:
-                    rightmost_tile_index = colNum
+                rightmost_tile_index = max(rightmost_tile_index, colNum)
                 break
     
     transformation = key_to_transformation_dict.get(transformation_key)
+
     if transformation == "left":
         for row in board:
             row.append(row[0])  # copies the leftmost column and puts it at the end
             row.pop(0)  # deletes the leftmost column
+
     elif transformation == "right":
         for row in board:
             row.insert(0, row[-1])
             row.pop(-1)
+
     elif transformation == "up":
         board.append(board[0 - stack_height])
         board.pop(-1 - stack_height)
+
     elif transformation == "down":
         board.insert(0 - stack_height, board[-1])
         board.pop()
+
     elif transformation == "leftbound":
         for row in board:
             row.insert(rightmost_tile_index + 1, row[leftmost_tile_index])
             row.pop(leftmost_tile_index)
+
     elif transformation == "rightbound":
         for row in board:
             row.insert(leftmost_tile_index, row[rightmost_tile_index])
             row.pop(rightmost_tile_index + 1)
+
+    else:
+        raise KeyError(f"invalid key for donut transformation. expected one of {', '.join(map(str,key_to_transformation_dict.keys()))} but found {transformation_key}")
+
     return board
 
-# unfinished! but i need to sleep
+

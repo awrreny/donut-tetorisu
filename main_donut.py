@@ -11,7 +11,7 @@ import pygame.locals as pgl
 import pygame as pg
 
 
-logging.basicConfig(filename='error.log', level=logging.INFO)
+# logging.basicConfig(filename='error.log', level=logging.INFO)
 pg.init()
 
 if tekoFontVisible:
@@ -218,8 +218,9 @@ class GameState:
                 #     board = shift_board(board, "leftbound")
                 # elif event.key == key_shiftrightbound:
                 #     board = shift_board(board, "rightbound")
-                else:
-                    board = donut_transformations.shift_board(board, event.key, board_columns)
+                elif event.key in donut_transformations.key_to_transformation_dict.keys():
+                    board = donut_transformations.shift_board(board, event.key)
+                # otherwise event.key is an unbound key
                 place_tetromino(tetrominoState)
                 render_ghost_piece()
                 draw_board()
